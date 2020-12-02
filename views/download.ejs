@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cyberdrop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin-top: 25px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        #goAgain {
+            text-decoration: none;
+        }
+
+        .img {
+            height: 50%;
+            width: 50%;
+        }
+
+        .moldura {
+            width: 100%;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://localhost:3005/socket.io/socket.io.js"></script>
+</head>
+
+<body bgcolor='white'>
+    <center><img src="logo.gif" class="logo" id="image" srcset="">
+        <h1 style="color:black" class="logo">cyberdrop downloader</h1>
+        <div id='title'></div>
+        <div id="progress"></div>
+        <div id="status"></div>
+
+        <div id="photo"></div>
+    </center>
+
+    <script>
+        const socket = io('http://localhost:3005/');
+
+        function sleep(time) {
+            return new Promise((resolve) => setTimeout(resolve, time));
+        }
+
+        function renderProgress(progress) {
+            $('#progress').html(progress);
+        }
+
+        function renderTitle(title) {
+            $('#title').html(title);
+        }
+
+        function renderPhoto(photo) {
+            $('#photo').append('<div class="moldura"><img class="img" src="' + photo + '"></div>')
+        }
+
+        function renderStatus(status) {
+            $('#status').append(status + '<br><a style="color: purple; text-decoration:none;" href="/index">go back</a>');
+        }
+
+        socket.on('progress', function (progress) {
+            renderProgress(progress);
+        })
+
+        socket.on('photo', function (photo) {
+            sleep(5000).then(() => {
+                renderPhoto(photo)
+            });;
+            console.log(photo)
+        })
+
+        socket.on('title', function (title) {
+            renderTitle(title);
+        })
+
+        socket.on('status', function (status) {
+            renderStatus(status);
+        })
+    </script>
+</body>
+
+</html>
