@@ -33,13 +33,12 @@
 </head>
 
 <body bgcolor='white'>
-    <center><img src="logo.gif" class="logo" id="image" srcset="">
+    <center><img src="logo.png" class="logo" width="250" height="250" id="image" srcset="">
         <h1 style="color:black" class="logo">cyberdrop downloader</h1>
         <div id='title'></div>
         <div id="progress"></div>
         <div id="status"></div>
 
-        <div id="photo"></div>
     </center>
 
     <script>
@@ -57,23 +56,12 @@
             $('#title').html(title);
         }
 
-        function renderPhoto(photo) {
-            $('#photo').append('<div class="moldura"><img class="img" src="' + photo + '"></div>')
-        }
-
         function renderStatus(status) {
             $('#status').append(status + '<br><a style="color: purple; text-decoration:none;" href="/index">go back</a>');
         }
 
         socket.on('progress', function (progress) {
             renderProgress(progress);
-        })
-
-        socket.on('photo', function (photo) {
-            sleep(5000).then(() => {
-                renderPhoto(photo)
-            });;
-            console.log(photo)
         })
 
         socket.on('title', function (title) {

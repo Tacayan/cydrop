@@ -54,12 +54,11 @@ app.use('/download', (req, res) => {
                     io.sockets.emit('progress', numberFile + '/' + photos.length);
                     resp.data.pipe(
                         fs.createWriteStream(`./public/${title}/${filename}.${filetype}`),
-                        io.sockets.emit('photo', `${title}/${filename}.${filetype}`),
                     );
                     i += 1;
                     if (i >= photos.length) {
-                        io.sockets.emit('status', 'download complete');
-                    }
+                        return io.sockets.emit('status', 'download complete');
+                    } 
                     return request();
                 });
             }
@@ -68,5 +67,5 @@ app.use('/download', (req, res) => {
 })
 
 server.listen(port,
-    () => console.log('WE ARE ONLINE :D')
+    () => console.log('WE ARE ONLINE :D IN ' + port)
 )
