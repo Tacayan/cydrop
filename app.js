@@ -7,7 +7,7 @@ const http = require('http')
 const _ = require('lodash')
 const fs = require('fs')
 
-const port = 3005
+const port = 4000
 
 const app = express()
 
@@ -46,6 +46,15 @@ app.use('/download', (req, res) => {
                 const filetype = photos[i].split('.').pop();
                 numberFile = i + 1
                 filename = title + '(' + numberFile + ')';
+
+                photo = {
+                    'source': `${title}/${filename}.${filetype}`,
+                    'number': numberFile,
+                    'size': photos.length
+                }
+
+                io.sockets.emit('photo', photo)
+
                 return axios({
                     method: 'GET',
                     url: photos[i],
@@ -56,9 +65,10 @@ app.use('/download', (req, res) => {
                         fs.createWriteStream(`./public/${title}/${filename}.${filetype}`),
                     );
                     i += 1;
+
                     if (i >= photos.length) {
                         return io.sockets.emit('status', 'download complete');
-                    } 
+                    }
                     return request();
                 });
             }

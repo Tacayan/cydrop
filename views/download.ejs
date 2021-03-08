@@ -29,7 +29,7 @@
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="http://localhost:3005/socket.io/socket.io.js"></script>
+    <script src="http://127.0.0.1:4000/socket.io/socket.io.js"></script>
 </head>
 
 <body bgcolor='white'>
@@ -38,14 +38,41 @@
         <div id='title'></div>
         <div id="progress"></div>
         <div id="status"></div>
-
+        <div id="photos"></div>
     </center>
 
     <script>
-        const socket = io('http://localhost:3005/');
+        const socket = io('http://127.0.0.1:4000/');
 
         function sleep(time) {
             return new Promise((resolve) => setTimeout(resolve, time));
+        }
+
+        var photos = []
+
+        function renderPhotos(photos, size) {
+            var i = 1
+            $('#photos').empty()
+            var stop = size++
+            while (i < size) {
+                // if (typeof photos[i] !== 'undefined') {
+                    $('#photos').append('<img id="photo" widht="250" height="250" src="' + photos[i] + '?' + new Date().getTime() + '">')
+                    console.log(photos[i])
+                    i++
+                // }
+            }
+        }
+
+        function savePhoto(photo) {
+
+            var i = 0
+            var stop = photo.size++
+            while (i < stop) {
+                if (i == photo.number)
+                    photos[i] = photo.source
+                i++
+            }
+            renderPhotos(photos, photo.size)
         }
 
         function renderProgress(progress) {
@@ -70,6 +97,10 @@
 
         socket.on('status', function (status) {
             renderStatus(status);
+        })
+
+        socket.on('photo', function (photo) {
+            savePhoto(photo)
         })
     </script>
 </body>
