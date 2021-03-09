@@ -13,18 +13,16 @@
             font-family: 'Roboto', sans-serif;
             font-weight: bold;
             text-transform: uppercase;
-        }
-
-        #goAgain {
+            letter-spacing: 3px;
             text-decoration: none;
         }
 
-        .img {
-            height: 50%;
-            width: 50%;
+        .preview {
+            height: 20%;
+            width: 20%;
         }
 
-        .moldura {
+        .frame {
             width: 100%;
         }
     </style>
@@ -32,33 +30,29 @@
     <script src="http://127.0.0.1:4000/socket.io/socket.io.js"></script>
 </head>
 
-<body bgcolor='white'>
-    <center><img src="logo.png" class="logo" width="250" height="250" id="image" srcset="">
-        <h1 style="color:black" class="logo">cyberdrop downloader</h1>
+<body>
+    <center><img src="logo.png" width="250" height="250">
+        <h1>cydrop downloader</h1>
+        <h1> シドロプ </h1>
         <div id='title'></div>
         <div id="progress"></div>
         <div id="status"></div>
+        <span>incomplete images maybe be corrupted</span>
         <div id="photos"></div>
     </center>
 
     <script>
         const socket = io('http://127.0.0.1:4000/');
 
-        function sleep(time) {
-            return new Promise((resolve) => setTimeout(resolve, time));
-        }
-
         var photos = []
 
-        function renderPhotos(photos, size) {
+        function renderPhotos(photos, stop) {
             var i = 1
             $('#photos').empty()
-            var stop = size++
-            while (i < size) {
-                // if (typeof photos[i] !== 'undefined') {
-                    $('#photos').append('<img id="photo" widht="250" height="250" src="' + photos[i] + '?' + new Date().getTime() + '">')
-                    console.log(photos[i])
-                    i++
+            while (i < stop) {
+                // if (!typeof photos[i] === 'undefined') {
+                $('#photos').append('<div class="frame"><img id="photo" class="preview" widht="250" height="250" src="' + photos[i] + '?' + new Date().getTime() + '"></div>')
+                i++
                 // }
             }
         }
@@ -72,7 +66,7 @@
                     photos[i] = photo.source
                 i++
             }
-            renderPhotos(photos, photo.size)
+            setTimeout(() => {renderPhotos(photos, stop)}, 5000)
         }
 
         function renderProgress(progress) {

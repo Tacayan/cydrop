@@ -41,6 +41,18 @@ app.use('/download', (req, res) => {
             if (!fs.existsSync(`./public/${title}`))
                 fs.mkdirSync(`./public/${title}`);
 
+            var data = {   
+                "title": title,
+                "size": photos.length,
+                "url": url
+            }
+
+            console.log(data)
+
+            fs.appendFile('log.txt', JSON.stringify(data, '/n'), function (error) {
+                console.log(error) 
+            })
+
             var i = 0
             function request() {
                 const filetype = photos[i].split('.').pop();
