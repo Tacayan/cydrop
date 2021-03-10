@@ -4,26 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cyberdrop</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200&display=swap" rel="stylesheet">
+    <title>cydrop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
     <style>
         * {
             margin-top: 25px;
             font-family: 'Roboto', sans-serif;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 10px;
             text-decoration: none;
+        }
+
+        .cydrop {
+            font-family: 'Noto Serif TC', serif;
+            font-weight: lighter;
+            /* color: rgb(0, 17, 255); */
+            letter-spacing: 15px;
+            font-size: 25px;
+            margin-top: -20px;
         }
 
         .preview {
             height: 20%;
             width: 20%;
+            padding: 10px;
+            box-shadow: 5px 10px 48px #888888;
         }
 
         .frame {
             width: 100%;
+        }
+
+        .warning {
+            background-color: black;
+            color: white;
+            margin: 50px;
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -32,12 +50,12 @@
 
 <body>
     <center><img src="logo.png" width="250" height="250">
-        <h1>cydrop downloader</h1>
-        <h1> シドロプ </h1>
+        <h1>cydrop</h1>
+        <h1 class='cydrop'>網絡滴</h1>
         <div id='title'></div>
         <div id="progress"></div>
-        <div id="status"></div>
-        <span>incomplete images maybe be corrupted</span>
+        <div id="status"></div><br>
+        <span class='warning'>incomplete images maybe be corrupted</span>
         <div id="photos"></div>
     </center>
 
@@ -50,23 +68,25 @@
             var i = 1
             $('#photos').empty()
             while (i < stop) {
-                // if (!typeof photos[i] === 'undefined') {
-                $('#photos').append('<div class="frame"><img id="photo" class="preview" widht="250" height="250" src="' + photos[i] + '?' + new Date().getTime() + '"></div>')
+                // if (typeof photos[i] === 'undefined') { console.log('cant') } else {
+                if (photos[i].split('.').pop() === 'mp4')
+                    $('#photos').append('<video class="frame" widht="250" height="250" controls><source id="photo" class="preview" src="' + photos[i] + '?' + new Date().getTime() + '" type="video/mp4"></video>')
+                else
+                    $('#photos').append('<div class="frame"><img id="photo" class="preview" widht="250" height="250" src="' + photos[i] + '?' + new Date().getTime() + '"></div>')
                 i++
-                // }
             }
+            // }
         }
 
         function savePhoto(photo) {
-
             var i = 0
-            var stop = photo.size++
+            var stop = ++photo.size
             while (i < stop) {
                 if (i == photo.number)
                     photos[i] = photo.source
                 i++
             }
-            setTimeout(() => {renderPhotos(photos, stop)}, 5000)
+            setTimeout(() => { renderPhotos(photos, stop) }, 2000)
         }
 
         function renderProgress(progress) {

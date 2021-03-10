@@ -35,22 +35,22 @@ app.use('/download', (req, res) => {
         .then((response) => {
             const $ = cheerio.load(response.data)
             const title = $('#title').attr('title').replace(RegExp(/[\\/:"*?<>|]/g), '')
+
             io.sockets.emit('title', title)
+
             const photos = _.map($('.image'), (i) => i.attribs.href)
 
             if (!fs.existsSync(`./public/${title}`))
-                fs.mkdirSync(`./public/${title}`);
+                fs.mkdirSync(`./public/${title}`)
 
-            var data = {   
+            var data = {
                 "title": title,
                 "size": photos.length,
                 "url": url
             }
 
-            console.log(data)
-
             fs.appendFile('log.txt', JSON.stringify(data, '/n'), function (error) {
-                console.log(error) 
+                console.log(error)
             })
 
             var i = 0
@@ -76,11 +76,11 @@ app.use('/download', (req, res) => {
                     resp.data.pipe(
                         fs.createWriteStream(`./public/${title}/${filename}.${filetype}`),
                     );
-                    i += 1;
+                    i++
 
-                    if (i >= photos.length) {
+                    if (i >= photos.length)
                         return io.sockets.emit('status', 'download complete');
-                    }
+
                     return request();
                 });
             }
