@@ -43,27 +43,18 @@ app.use('/download', (req, res) => {
             if (!fs.existsSync(`./public/${title}`))
                 fs.mkdirSync(`./public/${title}`)
 
-            var data = {
-                "title": title,
-                "size": photos.length,
-                "url": url
-            }
+            var data = { "title": title, "size": photos.length, "url": url }
 
-            fs.appendFile('log.txt', JSON.stringify(data, '/n'), function (error) {
-                console.log(error)
-            })
+            fs.appendFile('log.txt', JSON.stringify(data, '/n'))
 
             var i = 0
+
             function request() {
                 const filetype = photos[i].split('.').pop();
                 numberFile = i + 1
                 filename = title + '(' + numberFile + ')';
 
-                photo = {
-                    'source': `${title}/${filename}.${filetype}`,
-                    'number': numberFile,
-                    'size': photos.length
-                }
+                var photo = { 'source': `${title}/${filename}.${filetype}`, 'number': numberFile, 'size': photos.length }
 
                 io.sockets.emit('photo', photo)
 
