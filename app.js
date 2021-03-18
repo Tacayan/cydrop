@@ -45,7 +45,10 @@ app.use('/download', (req, res) => {
 
             var data = { "title": title, "size": photos.length, "url": url }
 
-            fs.appendFile('log.txt', JSON.stringify(data, '/n'))
+            fs.appendFile('log.txt', JSON.stringify(data, '/n'), function(error) {
+                if (error)
+                    console.log(error)
+            })
 
             var i = 0
 
