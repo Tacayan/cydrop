@@ -23,17 +23,12 @@ Then
 
 ```properties
 yarn install
-
-or 
-
-npm install
 ```
 
 After that, you can open in
 
 ```
 127.0.0.1:4000
-:warning: localhost confused socketio
 ```
 
 
