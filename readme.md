@@ -23,6 +23,8 @@ Then
 
 ```properties
 yarn install
+
+node app.js
 ```
 
 After that, you can open in
